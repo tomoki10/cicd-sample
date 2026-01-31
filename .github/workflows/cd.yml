@@ -1,27 +1,36 @@
 name: CD Pipeline
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types: [completed]
     branches: ["main"]
+
+permissions:
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t my-app .
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
-      - name: Deploy app via SSH
-        uses: appleboy/ssh-action@v1
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            docker stop my-app || true
-            docker rm my-app || true
-            docker run -d -p 80:3000 --name my-app my-app
+          path: src
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
