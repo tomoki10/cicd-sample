@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CI/CD Sample</title>
-</head>
-<body>
-  <h1>Hello, CI/CD!</h1>
-  <p>This page was deployed by GitHub Actions.</p>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CI/CD Sample</title>
+  </head>
+  <body>
+    <h1>Hello, CI/CD!</h1>
+    <p>This page was deployed by GitHub Actions.</p>
+    <div>
+      <input type="text" id="nameInput" placeholder="名前を入力" />
+      <button id="greetBtn">挨拶する</button>
+    </div>
+    <p id="result"></p>
+    <p id="count"></p>
+    <script src="index.js"></script>
+    <script>
+      document.getElementById("greetBtn").addEventListener("click", () => {
+        const name = document.getElementById("nameInput").value;
+        document.getElementById("result").textContent = greet(name);
+        document.getElementById("count").textContent =
+          `文字数: ${countCharacters(name)}`;
+      });
+    </script>
+  </body>
 </html>
