@@ -1,12 +1,15 @@
-const http = require("http");
+function greet(name) {
+  if (!name || name.trim() === "") {
+    return "Hello, World!";
+  }
+  return `Hello, ${name}!`;
+}
 
-const PORT = process.env.PORT || 3000;
+function countCharacters(text) {
+  if (!text) return 0;
+  return text.length;
+}
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("Hello, CI/CD!");
-});
-
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { greet, countCharacters };
+}
